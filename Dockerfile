@@ -116,13 +116,21 @@ RUN mkdir -p /usr/local/novnc && \
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-COPY ./.inject_bashrc /root
+RUN mkdir -p /home/admin
+COPY ./start.sh /home/admin
+RUN chmod +x /home/admin/start.sh
 
-COPY ./start.sh /
+# Create a user
+RUN useradd -m admin
+
+# Give sudo permission to the user "admin"
+RUN echo "admin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN chown -R admin:admin /home/admin
+USER admin
+
+WORKDIR /home/admin
 
 EXPOSE ${LISTEN_PORT}
 EXPOSE ${VNC_PORT}
 
-WORKDIR /root
-
-CMD ["/start.sh"]
+CMD ["/home/admin/start.sh"]
