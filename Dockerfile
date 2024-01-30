@@ -52,7 +52,7 @@ RUN sudo apt-get update && \
         fcitx5-mozc mozc-utils-gui im-config fcitx5-config-qt \
         # Xfce4
         # https://github.com/coonrad/Debian-Xfce4-Minimal-Install
-        xubuntu-desktop \
+        xfce4 \
         # Remote Desktop
         dbus dbus-x11 alsa-utils pulseaudio \
         pulseaudio-utils mesa-utils x11-apps \
@@ -126,6 +126,11 @@ RUN sudo curl -k -L -o /tmp/websockify.zip \
     sudo ln -sf /usr/local/novnc/websockify-${WEBSOCKIFY_VERSION} \
         /usr/local/novnc/noVNC-${NOVNC_VERSION}/utils/websockify && \
     sudo rm -rf /tmp/novnc.zip /tmp/websockify.zip
+
+# Fcitx5 configuraion
+RUN echo "export GTK_IM_MODULE=fcitx\n\
+        export QT_IM_MODULE=fcitx\n\
+        export XMODIFIERS=@im=fcitx" >> ~/.xprofile
 
 EXPOSE ${LISTEN_PORT}
 EXPOSE ${VNC_PORT}
