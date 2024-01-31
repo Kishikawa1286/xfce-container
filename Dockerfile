@@ -39,11 +39,20 @@ USER admin
 
 WORKDIR /home/admin
 
+# Add Kali Linux repository
+RUN sudo apt-get update && \
+    sudo apt-get install -y wget && \
+    sudo sh -c 'echo "deb http://http.kali.org/kali \
+        kali-rolling main non-free contrib" >> \
+        /etc/apt/sources.list' && \
+    wget -q -O - archive.kali.org/archive-key.asc | \
+        sudo apt-key add -
+
 RUN sudo apt-get update && \
     sudo DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
         # utils
-        wget curl gpg git apt-transport-https \
+        curl gpg git apt-transport-https \
         ca-certificates gnupg tzdata xauth uuid-dev \
         build-essential manpages-dev unzip dosfstools ssh \
         # SSH server
@@ -52,7 +61,9 @@ RUN sudo apt-get update && \
         fcitx5-mozc mozc-utils-gui im-config fcitx5-config-qt \
         # Xfce4
         # https://github.com/coonrad/Debian-Xfce4-Minimal-Install
-        xfce4 \
+        kali-desktop-xfce \
+        # Fonts
+        fonts-noto-cjk fonts-ipafont \
         # Remote Desktop
         dbus dbus-x11 alsa-utils pulseaudio \
         pulseaudio-utils mesa-utils x11-apps \
@@ -60,6 +71,8 @@ RUN sudo apt-get update && \
         dbus lxsession \
         # Websockify requires Python
         python3 python3-pip
+
+RUN fc-cache -fv
 
 # Create symbolic link to python3 for Websockify
 RUN sudo ln -s /usr/bin/python3 /usr/bin/python
@@ -128,9 +141,10 @@ RUN sudo curl -k -L -o /tmp/websockify.zip \
     sudo rm -rf /tmp/novnc.zip /tmp/websockify.zip
 
 # Fcitx5 configuraion
-RUN echo "export GTK_IM_MODULE=fcitx\n\
-        export QT_IM_MODULE=fcitx\n\
-        export XMODIFIERS=@im=fcitx" >> ~/.xprofile
+RUN echo "\
+export GTK_IM_MODULE=fcitx\n\
+export QT_IM_MODULE=fcitx\n\
+export XMODIFIERS=@im=fcitx" >> ~/.xprofile
 
 EXPOSE ${LISTEN_PORT}
 EXPOSE ${VNC_PORT}
