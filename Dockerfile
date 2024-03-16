@@ -1,7 +1,7 @@
-FROM nvidia/cuda:12.3.1-base-ubuntu22.04
+FROM nvidia/cuda:12.3.2-base-ubuntu22.04
 
-ARG NOVNC_VERSION=1.2.0
-ARG WEBSOCKIFY_VERSION=0.9.0
+ARG NOVNC_VERSION=1.4.0
+ARG WEBSOCKIFY_VERSION=0.11.0
 
 # Port
 ARG LISTEN_PORT=8085
@@ -43,7 +43,7 @@ RUN sudo apt-get update && \
     sudo DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
         # utils
-        curl gpg git apt-transport-https \
+        curl wget gpg git apt-transport-https \
         ca-certificates gnupg tzdata xauth uuid-dev \
         build-essential manpages-dev unzip dosfstools ssh \
         # SSH server
