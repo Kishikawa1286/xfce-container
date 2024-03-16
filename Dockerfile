@@ -52,7 +52,7 @@ RUN sudo apt-get update && \
         fcitx5-mozc mozc-utils-gui im-config fcitx5-config-qt \
         # Xfce4
         # https://github.com/coonrad/Debian-Xfce4-Minimal-Install
-        xubuntu-desktop xfce4-goodies xfce4 \
+        xubuntu-desktop xfce4-goodies \
         # Network manager
         network-manager-gnome \
         # Icon themes
