@@ -39,15 +39,6 @@ USER admin
 
 WORKDIR /home/admin
 
-# Add Kali Linux repository
-RUN sudo apt-get update && \
-    sudo apt-get install -y wget && \
-    sudo sh -c 'echo "deb http://http.kali.org/kali \
-        kali-rolling main non-free contrib" >> \
-        /etc/apt/sources.list' && \
-    wget -q -O - archive.kali.org/archive-key.asc | \
-        sudo apt-key add -
-
 RUN sudo apt-get update && \
     sudo DEBIAN_FRONTEND=noninteractive \
     apt-get install -y --no-install-recommends \
@@ -61,7 +52,13 @@ RUN sudo apt-get update && \
         fcitx5-mozc mozc-utils-gui im-config fcitx5-config-qt \
         # Xfce4
         # https://github.com/coonrad/Debian-Xfce4-Minimal-Install
-        kali-desktop-xfce \
+        xubuntu-desktop xfce4-goodies xfce4 \
+        # Network manager
+        network-manager-gnome \
+        # Icon themes
+        paper-icon-theme moka-icon-theme papirus-icon-theme \
+        # Have QT apps match the default GTK theme
+        qt5ct adwaita-qt \
         # Fonts
         fonts-noto-cjk fonts-ipafont \
         # Remote Desktop
